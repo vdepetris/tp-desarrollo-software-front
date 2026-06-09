@@ -1,5 +1,5 @@
+import { NavLink } from "react-router-dom";
 import "./Header.css";
-
 function Header() {
 
   return (
@@ -58,9 +58,26 @@ function Header() {
         </div>
 
         <nav className="header__nav">
-          <a href="/" className="active">Inicio</a>
-          <a href="/productos">Productos</a>
-          <a href="/contacto">Contacto</a>
+          <NavLink
+            to="/"
+            className={({ isActive }) => isActive ? "active" : ""}
+          >
+            Inicio
+          </NavLink>
+
+          <NavLink
+            to="/productos"
+            className={({ isActive }) => isActive ? "active" : ""}
+          >
+            Productos
+          </NavLink>
+
+          <NavLink
+            to="/contacto"
+            className={({ isActive }) => isActive ? "active" : ""}
+          >
+            Contacto
+          </NavLink>
         </nav>
 
         <div className="header__user">
