@@ -1,0 +1,45 @@
+.title-content{
+    padding: 0 12px;
+}
+.title-content h1{
+    font-size: 36px;
+}
+.title-content p{
+    font-size: 18px;
+}
+.two-row{
+    display: flex;
+    flex-direction: row;
+}
+
+.content{
+    display: flex;
+    justify-content: center ;
+}
+
+
+
+.formulario, .mapa{
+    width: 50%;
+    padding: 12px;
+    max-width: 600px;
+
+}
+
+.login-form-inputs input{
+    width: 100%;
+}
+.login-form-inputs {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+}
+.login-form-inputs select{
+    background-color: white;
+}
+.formulario .button{
+    margin: 10px;
+    width: 100%;
+    border: none;
+}
