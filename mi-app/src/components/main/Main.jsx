@@ -1,4 +1,6 @@
 import "./Main.css";
+import Card from "../card/card";
+
 const featuredProducts = [
   {
     name: "Whey Protein Ultra Premium",
@@ -63,15 +65,12 @@ function Main() {
         </div>
         <div className="product-grid">
           {featuredProducts.map((product) => (
-            <article key={product.name} className="product-card">
-              <div className="product-card__image" />
-              <div className="product-card__body">
-                <h3>{product.name}</h3>
-                <p>{product.description}</p>
-                <strong>{product.price}</strong>
-                <button className="btn btn--small">Ver más</button>
-              </div>
-            </article>
+            <Card
+              key={product.name}
+              name={product.name}
+              description={product.description}
+              price={product.price}
+            />
           ))}
         </div>
       </section>
@@ -80,5 +79,4 @@ function Main() {
 }
 
 export default Main;
-
 
