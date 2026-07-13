@@ -1,0 +1,169 @@
+.productos-carrito-container{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+}
+.producto{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.titulo-container{
+    flex: 1;
+    padding: 0 24px;
+}
+
+.imagen-container img{
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    border-radius: 100%;
+}
+
+.stock-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+    border-radius: 999px;
+    overflow: hidden;
+    padding: 2px;
+}
+.stock-container button{
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.precio-container{
+    text-align: center;
+}
+
+.carrito__container{
+    display: flex;
+    margin: 8px;
+
+}
+
+.carrito-resumen {
+  align-self: flex-start;
+  padding: 30px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  background-color: white;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+  margin: 0 auto;
+}
+
+.resumen-eyebrow {
+  color: #75a800;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.carrito-resumen h2 {
+  margin: 8px 0 28px;
+}
+
+.resumen-detalle {
+  display: grid;
+  gap: 16px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid #ddd;
+}
+
+.resumen-detalle > div,
+.resumen-total {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.envio-gratis {
+  color: #75a800;
+}
+
+.resumen-cupon {
+  display: grid;
+  gap: 10px;
+  padding: 22px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.resumen-cupon > div {
+  display: flex;
+}
+
+.resumen-cupon input {
+  min-width: 0;
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 10px 0 0 10px;
+}
+
+.resumen-cupon button {
+  padding: 0 16px;
+  border: none;
+  border-radius: 0 10px 10px 0;
+  background-color: #222;
+  color: white;
+  cursor: pointer;
+}
+
+.resumen-total {
+  align-items: flex-start;
+  padding: 24px 0;
+}
+
+.resumen-total > div {
+  display: grid;
+  text-align: right;
+}
+
+.resumen-total strong {
+  font-size: 24px;
+}
+
+.resumen-total small {
+  margin-top: 4px;
+  color: #777;
+}
+
+.boton-pagar {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 999px;
+  background-color: rgb(196, 231, 25);
+  color: #111;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.resumen-beneficios {
+  display: grid;
+  gap: 8px;
+  margin: 20px 0 0;
+  padding: 0;
+  color: #666;
+  font-size: 13px;
+  list-style: none;
+}
+.button-stock-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
