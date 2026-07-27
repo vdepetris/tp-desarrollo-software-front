@@ -6,6 +6,7 @@ import Login from "./components/login/Login";
 import Productos from "./components/productos/productos";
 import Contacto from "./components/contacto/contacto";
 import Carrito from "./components/carrito/carrito";
+import Dashboard from "./components/dashboard/dashboard";
 
 function App() {
   return (
@@ -63,6 +64,8 @@ function App() {
           </>
         }
       />
+
+    <Route path="/dashboard" element={<Dashboard />} />
 
     </Routes>
   );

@@ -1,0 +1,77 @@
+.inicio-dashboard {
+  width: 100%;
+}
+
+.actividad-card {
+  margin-top: 28px;
+  overflow: hidden;
+  border: 1px solid #24282e;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #15191e, #0d1014);
+  color: #f4f5f7;
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.16);
+}
+
+.actividad-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 26px;
+  border-bottom: 1px solid #24282e;
+}
+
+.actividad-card__header h2 {
+  margin: 0;
+  font-size: 19px;
+}
+
+.actividad-card__header a {
+  padding: 9px 14px;
+  border: 1px solid #2b3037;
+  border-radius: 9px;
+  color: #abff1b;
+  text-decoration: none;
+}
+
+.actividad-card__tabla {
+  overflow-x: auto;
+}
+
+.actividad-card table {
+  width: 100%;
+  margin: 0 auto;
+  border-collapse: collapse;
+}
+
+.actividad-card th,
+.actividad-card td {
+  padding: 18px 26px;
+  border-bottom: 1px solid #20242a;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.actividad-card th {
+  color: #92979f;
+  font-weight: 400;
+}
+
+.actividad-card tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.estado {
+  display: inline-block;
+  padding: 7px 11px;
+  border-radius: 7px;
+  background-color: rgba(171, 255, 27, 0.12);
+  color: #abff1b;
+}
+
+@media (max-width: 700px) {
+  .actividad-card__header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+  }
+}
