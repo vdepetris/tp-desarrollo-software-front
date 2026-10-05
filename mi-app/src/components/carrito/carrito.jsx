@@ -1,142 +1,115 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import "./carrito.css";
-const productosIniciales = [
-  {
-    id: 1,
-    name: "Whey Protein Ultra Premium",
-    description: "Chocolate · 1 kg",
-    price: 49990,
-    quantity: 1,
-    label: "WHEY",
-  },
-  {
-    id: 2,
-    name: "Creatina Monohidratada",
-    description: "Sin sabor · 300 g",
-    price: 24990,
-    quantity: 2,
-    label: "CREA",
-  },
-  {
-    id: 3,
-    name: "Multivitamínico Daily",
-    description: "60 cápsulas",
-    price: 19990,
-    quantity: 1,
-    label: "MULTI",
-  },
-];
 
+const productosIniciales = Array.from({ length: 4 }, (_, index) => ({
+  id: index + 1,
+  nombre: "Whey Protein Ultra Premium",
+  variante: "Chocolate · 1 kg",
+  precio: 49990,
+  cantidad: 1,
+}));
+
+const mostrarPrecio = (valor) => `$${valor.toLocaleString("es-AR")}`;
 
 function Carrito() {
- 
+  const [productos, setProductos] = useState(productosIniciales);
+
+  const cambiarCantidad = (id, cambio) => {
+    setProductos((actuales) =>
+      actuales.map((producto) =>
+        producto.id === id
+          ? { ...producto, cantidad: Math.max(1, producto.cantidad + cambio) }
+          : producto,
+      ),
+    );
+  };
+
+  const cantidadTotal = productos.reduce((total, producto) => total + producto.cantidad, 0);
+  const subtotal = productos.reduce(
+    (total, producto) => total + producto.precio * producto.cantidad,
+    0,
+  );
+
   return (
     <main className="carrito">
-      <section className="carrito__container">
+      <div className="carrito__cabecera">
+        <span className="carrito__eyebrow">Tu selección</span>
+        <h1>Tu carrito</h1>
+        <p>Revisá tus productos antes de finalizar la compra.</p>
+      </div>
 
-        <div className="productos-carrito-container">
+      <div className="carrito__container">
+        <section className="productos-carrito-container" aria-label="Productos en el carrito">
+          <div className="carrito__lista-encabezado">
+            <h2>Productos</h2>
+            <span>{cantidadTotal} {cantidadTotal === 1 ? "unidad" : "unidades"}</span>
+          </div>
 
-          <div className="producto">
-            <div className="imagen-container">
-              <img src="https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg" alt="Producto" />
-            </div>
-            <div className="titulo-container">
-              <h3>Whey Protein Ultra Premium</h3>
-              <p>Chocolate · 1 kg</p>
-            </div>
-            <div className="button-stock-container">
-              <div className="stock-container">
-                <button className="stock-button">-</button>
-                <span className="stock-quantity">1</span>
-                <button className="stock-button">+</button>
+          {productos.map((producto) => (
+            <article className="producto" key={producto.id}>
+              <div className="producto__imagen" aria-hidden="true">
+                <div className="producto__envase">
+                  <span>WHEY</span>
+                  <small>PROTEIN</small>
+                </div>
               </div>
-              <div className="precio-container">
-                <span className="precio">$49,990</span>
-              </div>
-            </div>
-          </div>
-         <div className="producto">
-            <div className="imagen-container">
-              <img src="https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg" alt="Producto" />
-            </div>
-            <div className="titulo-container">
-              <h3>Whey Protein Ultra Premium</h3>
-              <p>Chocolate · 1 kg</p>
-            </div>
-            <div className="button-stock-container">
-              <div className="stock-container">
-                <button className="stock-button">-</button>
-                <span className="stock-quantity">1</span>
-                <button className="stock-button">+</button>
-              </div>
-              <div className="precio-container">
-                <span className="precio">$49,990</span>
-              </div>
-            </div>
-          </div>
-         <div className="producto">
-            <div className="imagen-container">
-              <img src="https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg" alt="Producto" />
-            </div>
-            <div className="titulo-container">
-              <h3>Whey Protein Ultra Premium</h3>
-              <p>Chocolate · 1 kg</p>
-            </div>
-            <div className="button-stock-container">
-              <div className="stock-container">
-                <button className="stock-button">-</button>
-                <span className="stock-quantity">1</span>
-                <button className="stock-button">+</button>
-              </div>
-              <div className="precio-container">
-                <span className="precio">$49,990</span>
-              </div>
-            </div>
-          </div>
-         <div className="producto">
-            <div className="imagen-container">
-              <img src="https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg" alt="Producto" />
-            </div>
-            <div className="titulo-container">
-              <h3>Whey Protein Ultra Premium</h3>
-              <p>Chocolate · 1 kg</p>
-            </div>
-            <div className="button-stock-container">
-              <div className="stock-container">
-                <button className="stock-button">-</button>
-                <span className="stock-quantity">1</span>
-                <button className="stock-button">+</button>
-              </div>
-              <div className="precio-container">
-                <span className="precio">$49,990</span>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <div className="carrito-resumen">
+              <div className="producto__info">
+                <span className="producto__tipo">Suplemento deportivo</span>
+                <h3>{producto.nombre}</h3>
+                <p>{producto.variante}</p>
+                <span className="producto__precio-unitario">
+                  {mostrarPrecio(producto.precio)} c/u
+                </span>
+              </div>
+
+              <div className="producto__acciones">
+                <div className="stock-container" aria-label={`Cantidad de ${producto.nombre}`}>
+                  <button
+                    type="button"
+                    aria-label={`Quitar una unidad de ${producto.nombre}`}
+                    disabled={producto.cantidad === 1}
+                    onClick={() => cambiarCantidad(producto.id, -1)}
+                  >
+                    −
+                  </button>
+                  <span aria-live="polite">{producto.cantidad}</span>
+                  <button
+                    type="button"
+                    aria-label={`Agregar una unidad de ${producto.nombre}`}
+                    onClick={() => cambiarCantidad(producto.id, 1)}
+                  >
+                    +
+                  </button>
+                </div>
+                <div className="producto__subtotal">
+                  <small>Subtotal</small>
+                  <strong>{mostrarPrecio(producto.precio * producto.cantidad)}</strong>
+                </div>
+              </div>
+            </article>
+          ))}
+        </section>
+
+        <aside className="carrito-resumen" aria-label="Resumen de compra">
           <span className="resumen-eyebrow">Resumen</span>
           <h2>Resumen de compra</h2>
 
           <div className="resumen-detalle">
             <div>
-              <span>Productos (4)</span>
-              <span>$199.960</span>
+              <span>Productos ({cantidadTotal})</span>
+              <strong>{mostrarPrecio(subtotal)}</strong>
             </div>
-
             <div>
               <span>Envío</span>
               <strong className="envio-gratis">Gratis</strong>
             </div>
           </div>
 
-
           <div className="resumen-total">
             <span>Total</span>
-
             <div>
-              <strong>$199.960</strong>
+              <strong>{mostrarPrecio(subtotal)}</strong>
               <small>Impuestos incluidos</small>
             </div>
           </div>
@@ -149,9 +122,8 @@ function Carrito() {
             <li>Compra segura y protegida</li>
             <li>Envíos a todo el país</li>
           </ul>
-        </div>
-
-      </section>
+        </aside>
+      </div>
     </main>
   );
 }

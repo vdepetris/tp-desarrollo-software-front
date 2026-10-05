@@ -1,45 +1,206 @@
-.title-content{
-    padding: 0 12px;
-}
-.title-content h1{
-    font-size: 36px;
-}
-.title-content p{
-    font-size: 18px;
-}
-.two-row{
-    display: flex;
-    flex-direction: row;
+.contacto {
+  min-height: 100vh;
+  padding: 48px 24px 96px;
+  background: #f7f8f5;
+  color: #171a16;
 }
 
-.content{
-    display: flex;
-    justify-content: center ;
+.contacto__contenedor {
+  width: min(100%, 1240px);
+  margin: 0 auto;
 }
 
-
-
-.formulario, .mapa{
-    width: 50%;
-    padding: 12px;
-    max-width: 600px;
-
+.contacto__cabecera {
+  margin-bottom: 32px;
 }
 
-.login-form-inputs input{
-    width: 100%;
+.contacto__eyebrow,
+.contacto__numero {
+  color: #628700;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
 }
-.login-form-inputs {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-top: 8px;
+
+.contacto__cabecera h1 {
+  margin: 8px 0;
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.1;
 }
-.login-form-inputs select{
-    background-color: white;
+
+.contacto__cabecera p,
+.contacto__tarjeta-cabecera p {
+  margin: 0;
+  color: #6b706a;
+  line-height: 1.5;
 }
-.formulario .button{
-    margin: 10px;
-    width: 100%;
-    border: none;
+
+.contacto__columnas {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+  align-items: stretch;
+  gap: 28px;
+}
+
+.contacto__tarjeta {
+  min-width: 0;
+  padding: 32px;
+  border: 1px solid #e4e8df;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 12px 35px rgba(23, 26, 22, 0.055);
+}
+
+.contacto__tarjeta-cabecera {
+  margin-bottom: 28px;
+}
+
+.contacto__tarjeta-cabecera h2 {
+  margin: 9px 0 8px;
+  font-size: 26px;
+  line-height: 1.2;
+}
+
+.contacto__formulario form {
+  display: grid;
+  gap: 20px;
+}
+
+.contacto__campos-dobles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.contacto__campo {
+  display: grid;
+  gap: 9px;
+  min-width: 0;
+}
+
+.contacto__campo label {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.contacto__campo label span {
+  color: #6b706a;
+  font-weight: 400;
+}
+
+.contacto__campo input,
+.contacto__campo select,
+.contacto__campo textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 14px 16px;
+  border: 1px solid #dce2d6;
+  border-radius: 11px;
+  outline: 0;
+  background: #fff;
+  color: #171a16;
+  font: inherit;
+  font-size: 15px;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.contacto__campo input::placeholder,
+.contacto__campo textarea::placeholder {
+  color: #929990;
+}
+
+.contacto__campo textarea {
+  resize: vertical;
+  min-height: 132px;
+}
+
+.contacto__campo input:focus,
+.contacto__campo select:focus,
+.contacto__campo textarea:focus {
+  border-color: #86aa0b;
+  box-shadow: 0 0 0 4px rgba(185, 230, 0, 0.18);
+}
+
+.contacto__enviar {
+  width: 100%;
+  padding: 16px;
+  border: 0;
+  border-radius: 999px;
+  background: #b9e600;
+  color: #171a16;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 160ms ease, transform 160ms ease;
+}
+
+.contacto__enviar:hover {
+  background: #a9d200;
+  transform: translateY(-2px);
+}
+
+.contacto__estado {
+  margin: -4px 0 0;
+  color: #6b706a;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.contacto__ubicacion {
+  display: flex;
+  flex-direction: column;
+}
+
+.contacto__direccion {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 22px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.contacto__direccion-icono {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #edf5d8;
+  color: #628700;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.contacto__mapa {
+  flex: 1;
+  min-height: 410px;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #e8ece5;
+}
+
+.contacto__mapa iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 410px;
+  border: 0;
+}
+
+@media (max-width: 850px) {
+  .contacto__columnas { grid-template-columns: 1fr; }
+  .contacto__mapa,
+  .contacto__mapa iframe { min-height: 360px; }
+}
+
+@media (max-width: 560px) {
+  .contacto { padding: 32px 16px 64px; }
+  .contacto__tarjeta { padding: 22px; }
+  .contacto__campos-dobles { grid-template-columns: 1fr; }
+  .contacto__tarjeta-cabecera h2 { font-size: 23px; }
+  .contacto__mapa,
+  .contacto__mapa iframe { min-height: 300px; }
 }
