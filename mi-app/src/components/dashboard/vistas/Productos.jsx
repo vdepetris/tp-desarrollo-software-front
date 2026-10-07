@@ -26,8 +26,7 @@ function Productos() {
   }, []);
 
 
-return (  
-
+return (
   
     <div className="inicio-dashboard">
       <div className="productos-dashboard__titulo">

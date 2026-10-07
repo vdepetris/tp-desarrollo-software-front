@@ -9,14 +9,17 @@
   gap: 20px;
 }
 
-.categorias__titulo button {
-  padding: 11px 18px;
-  border: none;
-  border-radius: 9px;
-  background-color: #abff1b;
-  color: #111;
-  font-weight: 700;
-  cursor: pointer;
+.categorias__titulo h1 {
+  margin: 0;
+}
+
+.categorias__titulo .btn:hover {
+  transform: none;
+}
+
+.categorias__titulo .btn:focus-visible {
+  outline: 2px solid var(--dashboard-accent-text);
+  outline-offset: 3px;
 }
 
 .categorias__buscar {
@@ -69,27 +72,49 @@
 }
 
 .categorias__estado {
+  display: inline-block;
   padding: 6px 10px;
   border-radius: 7px;
-  background-color: #eef8dc;
-  color: var(--dashboard-accent-text);
+  background-color: #f2f4f7;
+  color: #475467;
+}
+
+.categorias__estado--activo {
+  background-color: #ecfdf3;
+  color: #027a48;
+}
+
+.categorias__estado--inactivo {
+  background-color: #fef3f2;
+  color: #b42318;
 }
 
 .categorias__acciones {
   display: flex;
-  gap: 8px;
+  justify-content: flex-start;
+  gap: 10px;
 }
 
-.categorias__acciones button {
-  border: none;
-  background: transparent;
-  color: #475467;
-  font-size: 19px;
-  cursor: pointer;
+.categorias__acciones .btn {
+  padding: 9px 16px;
 }
 
-.categorias__acciones button:hover {
-  color: var(--dashboard-accent-text);
+.categorias__acciones .btn:hover {
+  transform: none;
+}
+
+.categorias__acciones .btn:focus-visible {
+  outline: 2px solid var(--dashboard-accent-text);
+  outline-offset: 3px;
+}
+
+.dashboard .categorias__eliminar {
+  color: #b42318;
+  border-color: #fecdca;
+}
+
+.dashboard .categorias__eliminar:hover {
+  background-color: #fff1f0;
 }
 
 @media (max-width: 600px) {
