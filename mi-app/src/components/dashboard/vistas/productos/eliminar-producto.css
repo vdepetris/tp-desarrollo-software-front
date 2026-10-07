@@ -1,0 +1,19 @@
+.eliminar-producto p {
+  margin: 0 0 14px;
+  color: #d5d8dc;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.eliminar-producto .eliminar-producto__aviso {
+  color: #92979f;
+}
+
+.eliminar-producto__confirmar {
+  color: #ff9090;
+  border-color: rgba(255, 144, 144, 0.25);
+}
+
+.eliminar-producto__confirmar:hover {
+  background-color: rgba(255, 144, 144, 0.12);
+}

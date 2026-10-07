@@ -1,17 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Card from "../card/card";
 import "./productos.css";
 
-const productos = [
-  { id: 1, name: "Whey Protein Ultra Premium", description: "Chocolate · 1 kg", price: 49990, category: "proteinas", brand: "ENA", label: "WHEY" },
-  { id: 2, name: "Creatina Monohidratada", description: "Sin sabor · 300 g", price: 24990, category: "creatinas", brand: "Star Nutrition", label: "CREA" },
-  { id: 3, name: "Multivitamínico Daily", description: "60 cápsulas", price: 19990, category: "vitaminas", brand: "Gold Nutrition", label: "MULTI" },
-  { id: 4, name: "Whey Protein Isolate", description: "Vainilla · 900 g", price: 67990, category: "proteinas", brand: "Star Nutrition", label: "WHEY" },
-  { id: 5, name: "Creatina Micronizada", description: "Sin sabor · 300 g", price: 31990, category: "creatinas", brand: "ENA", label: "CREA" },
-  { id: 6, name: "Shaker Pro", description: "Botella mezcladora · 700 ml", price: 12990, category: "accesorios", brand: "Gold Nutrition", label: "SHAKE" },
-  { id: 7, name: "Omega 3 Premium", description: "90 cápsulas", price: 28990, category: "vitaminas", brand: "ENA", label: "OMEGA" },
-  { id: 8, name: "Barra Proteica Box", description: "Pack de 12 unidades", price: 39990, category: "proteinas", brand: "Gold Nutrition", label: "BAR" },
-];
+const apiUrl = import.meta.env.VITE_API_URL;
+
 
 const categorias = {
   proteinas: "Proteínas",
@@ -33,7 +25,19 @@ function Productos() {
   const [filtros, setFiltros] = useState(filtrosIniciales);
   const [filtrosAplicados, setFiltrosAplicados] = useState(filtrosIniciales);
   const [filtrosAbiertos, setFiltrosAbiertos] = useState(false);
+  const [productos, setProductos] = useState([]);
 
+  useEffect(() => {
+    async function cargarProductos() {
+      const respuesta = await fetch(`${apiUrl}/productos`);
+      const datos = await respuesta.json();
+
+      setProductos(datos);
+
+    }
+
+    cargarProductos();
+  }, []);
   const cambiarMarca = (marca) => {
     setFiltros((actuales) => ({
       ...actuales,
@@ -170,27 +174,22 @@ function Productos() {
           </aside>
 
           <section className="productos-resultados" aria-label="Catálogo de productos">
-            {productosVisibles.length > 0 ? (
+            {productos.length > 0 ? (
               <div className="product-list">
-                {productosVisibles.map((producto) => (
+                {productos.map((producto) => (
                   <Card
                     key={producto.id}
                     variant="catalog"
-                    name={producto.name}
-                    description={producto.description}
-                    price={mostrarPrecio(producto.price)}
-                    category={categorias[producto.category]}
-                    categoryKey={producto.category}
-                    brand={producto.brand}
-                    label={producto.label}
+                    name={producto.nombre}
+                    description={producto.descripcion}
+                    price={mostrarPrecio(Number(producto.precio))}
+                    category={producto.categoria?.nombre}
                   />
                 ))}
               </div>
             ) : (
               <div className="productos-vacio">
                 <h2>No encontramos productos</h2>
-                <p>Probá con otra categoría, marca o precio máximo.</p>
-                <button type="button" onClick={limpiarFiltros}>Limpiar filtros</button>
               </div>
             )}
           </section>

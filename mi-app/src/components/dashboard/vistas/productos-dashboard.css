@@ -1,0 +1,47 @@
+.productos-dashboard__titulo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.productos-dashboard__titulo h1 {
+  margin: 0;
+}
+
+.productos-dashboard__acciones {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.productos-dashboard__acciones .btn {
+  padding: 9px 16px;
+}
+
+.productos-dashboard__titulo .btn:hover,
+.productos-dashboard__acciones .btn:hover {
+  transform: none;
+}
+
+.productos-dashboard__eliminar {
+  color: #ff9090;
+  border-color: rgba(255, 144, 144, 0.25);
+}
+
+.productos-dashboard__eliminar:hover {
+  background-color: rgba(255, 144, 144, 0.12);
+}
+
+.productos-dashboard__titulo .btn:focus-visible,
+.productos-dashboard__acciones .btn:focus-visible {
+  outline: 2px solid #abff1b;
+  outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+  .productos-dashboard__titulo {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
