@@ -1,0 +1,120 @@
+.pedidos-dashboard {
+  width: 100%;
+}
+
+.pedidos__titulo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.pedidos__titulo button {
+  padding: 11px 18px;
+  border: none;
+  border-radius: 9px;
+  background-color: #abff1b;
+  color: #111;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pedidos__buscar {
+  width: min(360px, 100%);
+  margin: 22px 0;
+  padding: 12px 16px;
+  border: 1px solid #d0d5dd;
+  border-radius: 9px;
+  outline: none;
+  background-color: #ffffff;
+  color: var(--text);
+  font-size: 15px;
+}
+
+.pedidos__buscar:focus {
+  border-color: var(--dashboard-accent-text);
+}
+
+.pedidos__tabla {
+  overflow-x: auto;
+  border: 1px solid var(--dashboard-border);
+  border-radius: 14px;
+  background-color: #ffffff;
+}
+
+.pedidos__tabla table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.pedidos__tabla th,
+.pedidos__tabla td {
+  padding: 17px 20px;
+  border-bottom: 1px solid var(--dashboard-border);
+  text-align: left;
+}
+
+.pedidos__tabla th {
+  background-color: #f9fafb;
+  color: #667085;
+  font-weight: 500;
+}
+
+.pedidos__tabla td {
+  color: #344054;
+}
+
+.pedidos__tabla tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.pedidos__estado {
+  padding: 6px 10px;
+  border-radius: 7px;
+  background-color: #eef8dc;
+  color: var(--dashboard-accent-text);
+}
+
+.pedidos__acciones {
+  display: flex;
+  gap: 8px;
+}
+
+.pedidos__acciones button {
+  border: none;
+  background: transparent;
+  color: #475467;
+  font-size: 19px;
+  cursor: pointer;
+}
+
+.pedidos__acciones button:hover {
+  color: var(--dashboard-accent-text);
+}
+
+@media (max-width: 600px) {
+  .pedidos__titulo {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+.pedidos__estado--pendiente {
+  background-color: #fff4d6;
+  color: #9a6700;
+}
+
+.pedidos__estado--cancelado {
+  background-color: #fde4e1;
+  color: #b42318;
+}
+
+.pedidos__estado {
+  text-transform: capitalize;
+}
+
+.pedidos__estado--pagado,
+.pedidos__estado--enviado {
+  background-color: #e0eefc;
+  color: #175cd3;
+}
