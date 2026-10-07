@@ -1,19 +1,19 @@
 .eliminar-producto p {
   margin: 0 0 14px;
-  color: #d5d8dc;
+  color: #344054;
   line-height: 1.5;
   overflow-wrap: anywhere;
 }
 
 .eliminar-producto .eliminar-producto__aviso {
-  color: #92979f;
+  color: #667085;
 }
 
-.eliminar-producto__confirmar {
-  color: #ff9090;
-  border-color: rgba(255, 144, 144, 0.25);
+.dashboard .eliminar-producto__confirmar {
+  color: #b42318;
+  border-color: #fecdca;
 }
 
-.eliminar-producto__confirmar:hover {
-  background-color: rgba(255, 144, 144, 0.12);
+.dashboard .eliminar-producto__confirmar:hover {
+  background-color: #fff1f0;
 }

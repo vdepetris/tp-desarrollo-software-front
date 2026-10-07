@@ -23,23 +23,23 @@
   width: min(360px, 100%);
   margin: 22px 0;
   padding: 12px 16px;
-  border: 1px solid #2a2f36;
+  border: 1px solid #d0d5dd;
   border-radius: 9px;
   outline: none;
-  background-color: #15191e;
-  color: white;
+  background-color: #ffffff;
+  color: var(--text);
   font-size: 15px;
 }
 
 .categorias__buscar:focus {
-  border-color: #abff1b;
+  border-color: var(--dashboard-accent-text);
 }
 
 .categorias__tabla {
   overflow-x: auto;
-  border: 1px solid #24282e;
+  border: 1px solid var(--dashboard-border);
   border-radius: 14px;
-  background-color: #11151a;
+  background-color: #ffffff;
 }
 
 .categorias__tabla table {
@@ -50,17 +50,18 @@
 .categorias__tabla th,
 .categorias__tabla td {
   padding: 17px 20px;
-  border-bottom: 1px solid #24282e;
+  border-bottom: 1px solid var(--dashboard-border);
   text-align: left;
 }
 
 .categorias__tabla th {
-  color: #92979f;
+  background-color: #f9fafb;
+  color: #667085;
   font-weight: 500;
 }
 
 .categorias__tabla td {
-  color: #d5d8dc;
+  color: #344054;
 }
 
 .categorias__tabla tbody tr:last-child td {
@@ -70,8 +71,8 @@
 .categorias__estado {
   padding: 6px 10px;
   border-radius: 7px;
-  background-color: rgba(171, 255, 27, 0.12);
-  color: #abff1b;
+  background-color: #eef8dc;
+  color: var(--dashboard-accent-text);
 }
 
 .categorias__acciones {
@@ -82,13 +83,13 @@
 .categorias__acciones button {
   border: none;
   background: transparent;
-  color: #c5c8cc;
+  color: #475467;
   font-size: 19px;
   cursor: pointer;
 }
 
 .categorias__acciones button:hover {
-  color: #abff1b;
+  color: var(--dashboard-accent-text);
 }
 
 @media (max-width: 600px) {

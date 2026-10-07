@@ -24,18 +24,18 @@
   transform: none;
 }
 
-.productos-dashboard__eliminar {
-  color: #ff9090;
-  border-color: rgba(255, 144, 144, 0.25);
+.dashboard .productos-dashboard__eliminar {
+  color: #b42318;
+  border-color: #fecdca;
 }
 
-.productos-dashboard__eliminar:hover {
-  background-color: rgba(255, 144, 144, 0.12);
+.dashboard .productos-dashboard__eliminar:hover {
+  background-color: #fff1f0;
 }
 
 .productos-dashboard__titulo .btn:focus-visible,
 .productos-dashboard__acciones .btn:focus-visible {
-  outline: 2px solid #abff1b;
+  outline: 2px solid var(--dashboard-accent-text);
   outline-offset: 3px;
 }
 

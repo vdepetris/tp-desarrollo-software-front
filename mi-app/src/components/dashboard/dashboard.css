@@ -1,8 +1,13 @@
 .dashboard {
+  --text: #20262e;
+  --muted: #667085;
+  --dashboard-border: #e4e7ec;
+  --dashboard-accent-text: #3f6212;
+  color-scheme: light;
   min-height: 100vh;
   display: flex;
-  background-color: #0b0e12;
-  color: #f4f5f7;
+  background-color: #f8fafb;
+  color: var(--text);
   font-family: "Roboto", sans-serif;
 }
 
@@ -12,15 +17,16 @@
   padding: 38px 18px 28px;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(145deg, #090c0f, #050709);
-  color: white;
+  background: #ffffff;
+  color: var(--text);
   margin: 0;
+  border-right: 1px solid var(--dashboard-border);
 
 }
 
 .dashboard__logo {
   margin: 0 14px 48px;
-  color: white;
+  color: var(--text);
   font-size: 26px;
   font-weight: 900;
   font-style: italic;
@@ -28,7 +34,7 @@
 }
 
 .dashboard__logo span {
-  color: #abff1b;
+  color: var(--dashboard-accent-text);
 }
 
 .dashboard__nav {
@@ -47,7 +53,7 @@
   border: none;
   border-radius: 12px;
   background-color: transparent;
-  color: #c5c8cc;
+  color: #475467;
   font-family: inherit;
   font-size: 16px;
   text-align: left;
@@ -56,22 +62,16 @@
   transition: 0.2s;
 }
 
-.dashboard__nav a span,
-.dashboard__logout span {
+.dashboard__icon {
   width: 22px;
-  color: #aeb3b8;
-  font-size: 21px;
-  text-align: center;
+  height: 22px;
+  flex-shrink: 0;
 }
 
 .dashboard__nav button:hover,
 .dashboard__nav button.active {
-  background-color: rgba(171, 255, 27, 0.1);
-  color: #abff1b;
-}
-
-.dashboard__nav button.active span {
-  color: #abff1b;
+  background-color: #eef8dc;
+  color: var(--dashboard-accent-text);
 }
 
 .dashboard__logout {
@@ -79,7 +79,8 @@
 }
 
 .dashboard__logout:hover {
-  color: white;
+  background-color: #f2f4f7;
+  color: var(--text);
 }
 
 .dashboard__content {
@@ -95,7 +96,7 @@
 
 .dashboard__content p {
   margin: 0;
-  color: #666;
+  color: var(--muted);
 }
 
 @media (max-width: 600px) {
@@ -106,4 +107,20 @@
   .dashboard__content {
     padding: 28px 20px;
   }
+}
+
+.dashboard .btn--secondary {
+  background: #ffffff;
+  color: var(--text);
+  border: 1px solid #d0d5dd;
+}
+
+.dashboard .btn--secondary:hover {
+  background: #f2f4f7;
+}
+
+.dashboard__nav button:focus-visible,
+.dashboard__logout:focus-visible {
+  outline: 2px solid var(--dashboard-accent-text);
+  outline-offset: 3px;
 }
