@@ -1,25 +1,28 @@
 .paginator {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: 14px;
-  margin: 36px 16px 0;
+  margin: 20px 0 0;
   padding: 18px;
-  background-color: #080a0f;
+  background-color: #fff;
+  border: 1px solid #e4e7ec;
   border-radius: 8px;
 }
 
 .paginator__pages {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
 }
 
 .paginator__button,
 .paginator__page {
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background-color: rgba(255, 255, 255, 0.08);
-  color: var(--text, #f4f5f7);
+  border: 1px solid #d0d5dd;
+  background-color: #fff;
+  color: #344054;
   border-radius: 999px;
   cursor: pointer;
   font-family: roboto, sans-serif;
@@ -36,16 +39,26 @@
   height: 40px;
 }
 
-.paginator__button:hover,
-.paginator__page:hover {
-  border-color: rgba(171, 255, 27, 0.45);
-  background-color: rgba(171, 255, 27, 0.12);
+.paginator__button:hover:not(:disabled),
+.paginator__page:hover:not(:disabled) {
+  border-color: #86aa0b;
+  background-color: #eef8dc;
 }
 
 .paginator__page--active {
   border-color: var(--accent, #abff1b);
   background: linear-gradient(135deg, var(--accent, #abff1b), #a5ff0b);
   color: #181919;
+}
+
+.paginator button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.paginator button:focus-visible {
+  outline: 2px solid #3f6212;
+  outline-offset: 3px;
 }
 
 @media (max-width: 640px) {

@@ -23,15 +23,30 @@ function FormularioProducto({ productoInicial, onCerrar, onGuardado }) {
     const dialogo = modal.current;
     dialogo.showModal();
 
-    // GET /categorias: obtenemos la lista y actualizamos las opciones del selector.
+    const controller = new AbortController();
+
+    // El selector necesita todas las categorías, aunque el GET venga paginado.
     async function cargarCategorias() {
       try {
-        const respuesta = await fetch(`${apiUrl}/categorias`);
-        if (!respuesta.ok) throw new Error("No se pudieron cargar las categorías");
-        setCategorias(await respuesta.json());
+        let todas = [];
+        let pagina = 1;
+        let totalPaginas = 1;
+
+        do {
+          const respuesta = await fetch(`${apiUrl}/categorias?page=${pagina}`, {
+            signal: controller.signal,
+          });
+          if (!respuesta.ok) throw new Error("No se pudieron cargar las categorías");
+          const resultado = await respuesta.json();
+          todas = [...todas, ...resultado.datos];
+          totalPaginas = resultado.totalPaginas;
+          pagina++;
+        } while (pagina <= totalPaginas);
+
+        setCategorias(todas);
       } catch (err) {
         // Si falla la petición, guardamos el mensaje para mostrarlo en el formulario.
-        setError(err.message);
+        if (err.name !== "AbortError") setError(err.message);
       }
     }
 
@@ -39,7 +54,10 @@ function FormularioProducto({ productoInicial, onCerrar, onGuardado }) {
     cargarCategorias();
     // Limpieza del efecto: cerramos el diálogo al desmontar el componente.
     // React también ejecuta esta limpieza en el ciclo adicional de StrictMode en desarrollo.
-    return () => dialogo.close();
+    return () => {
+      controller.abort();
+      dialogo.close();
+    };
   }, []);
 
   // Se ejecuta al enviar el formulario con el botón Guardar o con Enter.

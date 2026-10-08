@@ -1,21 +1,14 @@
 import { useState, useEffect } from "react";
 import Card from "../card/card";
+import Paginator from "../paginator/paginator";
 import "./productos.css";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
 
-const categorias = {
-  proteinas: "Proteínas",
-  creatinas: "Creatinas",
-  vitaminas: "Vitaminas",
-  accesorios: "Accesorios",
-};
-
 const filtrosIniciales = {
   categoria: "",
   precio: 100000,
-  marcas: [],
   orden: "relevancia",
 };
 
@@ -25,54 +18,66 @@ function Productos() {
   const [filtros, setFiltros] = useState(filtrosIniciales);
   const [filtrosAplicados, setFiltrosAplicados] = useState(filtrosIniciales);
   const [filtrosAbiertos, setFiltrosAbiertos] = useState(false);
-  const [productos, setProductos] = useState([]);
+  const [categorias, setCategorias] = useState([]);
+  const [total, setTotal] = useState(null);
+  const [reinicio, setReinicio] = useState(0);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    async function cargarProductos() {
-      const respuesta = await fetch(`${apiUrl}/productos`);
-      const datos = await respuesta.json();
+    const controller = new AbortController();
 
-      setProductos(datos);
+    async function cargarCategorias() {
+      try {
+        // Las opciones de categorías se cargan independientemente de la página de productos.
+        let todos = [];
+        let pagina = 1;
+        let totalPaginas = 1;
 
+        do {
+          const respuesta = await fetch(`${apiUrl}/categorias?page=${pagina}`, {
+            signal: controller.signal,
+          });
+          if (!respuesta.ok) throw new Error("No se pudieron cargar las categorías.");
+          const resultado = await respuesta.json();
+          todos = [...todos, ...resultado.datos];
+          totalPaginas = resultado.totalPaginas;
+          pagina++;
+        } while (pagina <= totalPaginas);
+
+        setCategorias(todos);
+      } catch (err) {
+        if (err.name !== "AbortError") setError(err.message);
+      }
     }
 
-    cargarProductos();
+    cargarCategorias();
+    return () => controller.abort();
   }, []);
-  const cambiarMarca = (marca) => {
-    setFiltros((actuales) => ({
-      ...actuales,
-      marcas: actuales.marcas.includes(marca)
-        ? actuales.marcas.filter((item) => item !== marca)
-        : [...actuales.marcas, marca],
-    }));
-  };
 
   const aplicarFiltros = (event) => {
     event.preventDefault();
-    setFiltrosAplicados({ ...filtros, marcas: [...filtros.marcas] });
+    setFiltrosAplicados({ ...filtros });
+    setTotal(null);
+    setReinicio((actual) => actual + 1);
     setFiltrosAbiertos(false);
   };
 
   const limpiarFiltros = () => {
     setFiltros(filtrosIniciales);
     setFiltrosAplicados(filtrosIniciales);
+    setTotal(null);
+    setReinicio((actual) => actual + 1);
     setFiltrosAbiertos(false);
   };
 
-  const productosVisibles = productos
-    .filter((producto) =>
-      (!filtrosAplicados.categoria || producto.category === filtrosAplicados.categoria) &&
-      producto.price <= filtrosAplicados.precio &&
-      (filtrosAplicados.marcas.length === 0 || filtrosAplicados.marcas.includes(producto.brand)),
-    )
-    .sort((a, b) => {
-      switch (filtrosAplicados.orden) {
-        case "menor-precio": return a.price - b.price;
-        case "mayor-precio": return b.price - a.price;
-        case "nombre": return a.name.localeCompare(b.name, "es");
-        default: return a.id - b.id;
-      }
-    });
+  const parametros = new URLSearchParams({
+    precioMaximo: String(filtrosAplicados.precio),
+    orden: filtrosAplicados.orden,
+  });
+  if (filtrosAplicados.categoria) {
+    parametros.set("categoriaId", filtrosAplicados.categoria);
+  }
+  const url = `${apiUrl}/productos?${parametros}`;
 
   return (
     <main className="productos-pagina">
@@ -84,7 +89,7 @@ function Productos() {
             <p>Encontrá lo que necesitás para acompañar tu rutina.</p>
           </div>
           <span className="productos-pagina__contador">
-            {productosVisibles.length} {productosVisibles.length === 1 ? "producto encontrado" : "productos encontrados"}
+            {total === null ? "Cargando productos..." : `${total} ${total === 1 ? "producto encontrado" : "productos encontrados"}`}
           </span>
         </div>
 
@@ -105,6 +110,7 @@ function Productos() {
               <button type="button" onClick={limpiarFiltros}>Limpiar</button>
             </div>
 
+            {error && <p role="alert">{error}</p>}
             <form onSubmit={aplicarFiltros}>
               <div className="filtro-grupo">
                 <label htmlFor="categoria">Categoría</label>
@@ -115,8 +121,8 @@ function Productos() {
                   onChange={(event) => setFiltros({ ...filtros, categoria: event.target.value })}
                 >
                   <option value="">Todas</option>
-                  {Object.entries(categorias).map(([valor, etiqueta]) => (
-                    <option key={valor} value={valor}>{etiqueta}</option>
+                  {categorias.map((categoria) => (
+                    <option key={categoria.id} value={categoria.id}>{categoria.nombre}</option>
                   ))}
                 </select>
               </div>
@@ -138,22 +144,6 @@ function Productos() {
                 />
               </div>
 
-              <fieldset className="filtro-grupo filtro-grupo--marcas">
-                <legend>Marca</legend>
-                {["ENA", "Star Nutrition", "Gold Nutrition"].map((marca) => (
-                  <label className="filtro-checkbox" key={marca}>
-                    <input
-                      type="checkbox"
-                      name="marca"
-                      value={marca}
-                      checked={filtros.marcas.includes(marca)}
-                      onChange={() => cambiarMarca(marca)}
-                    />
-                    {marca}
-                  </label>
-                ))}
-              </fieldset>
-
               <div className="filtro-grupo">
                 <label htmlFor="orden">Ordenar por</label>
                 <select
@@ -174,24 +164,35 @@ function Productos() {
           </aside>
 
           <section className="productos-resultados" aria-label="Catálogo de productos">
-            {productos.length > 0 ? (
-              <div className="product-list">
-                {productos.map((producto) => (
-                  <Card
-                    key={producto.id}
-                    variant="catalog"
-                    name={producto.nombre}
-                    description={producto.descripcion}
-                    price={mostrarPrecio(Number(producto.precio))}
-                    category={producto.categoria?.nombre}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="productos-vacio">
-                <h2>No encontramos productos</h2>
-              </div>
-            )}
+            <Paginator
+              key={`${url}-${reinicio}`}
+              url={url}
+              onTotal={setTotal}
+              mensajeVacio={
+                <div className="productos-vacio">
+                  <h2>No encontramos productos</h2>
+                  <p>Probá cambiar los filtros.</p>
+                  <button type="button" onClick={limpiarFiltros}>Limpiar filtros</button>
+                </div>
+              }
+            >
+              {(productos) => (
+                <div className="product-list">
+                  {productos.map((producto) => (
+                    <Card
+                      key={producto.id}
+                      id={producto.id}
+                      variant="catalog"
+                      name={producto.nombre}
+                      description={producto.descripcion}
+                      price={mostrarPrecio(Number(producto.precio))}
+                      category={producto.categoria?.nombre}
+                      label="NUTRAX"
+                    />
+                  ))}
+                </div>
+              )}
+            </Paginator>
           </section>
         </div>
       </div>

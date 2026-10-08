@@ -1,8 +1,9 @@
 import "./card.css";
 
-function Card({ name, description, price, variant, category, categoryKey, brand, label }) {
+function Card({ id, name, description, price, variant, category, categoryKey, label }) {
   if (variant === "catalog") {
     return (
+      <a href={`/productos/${id ?? "detalle"}`} className="product-card__link" aria-label={`Ver detalles de ${name}`}>
       <article className="product-card product-card--catalog">
         <div className={`product-card__image product-card__image--${categoryKey}`} aria-hidden="true">
           <div className="product-card__visual">
@@ -15,15 +16,9 @@ function Card({ name, description, price, variant, category, categoryKey, brand,
           <h3>{name}</h3>
           <p>{description}</p>
           <strong>{price}</strong>
-          <details className="product-card__details">
-            <summary>Ver producto</summary>
-            <div>
-              <span>Marca: {brand}</span>
-              <span>Categoría: {category}</span>
-            </div>
-          </details>
         </div>
       </article>
+      </a>
     );
   }
 

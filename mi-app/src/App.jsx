@@ -4,6 +4,7 @@ import Main from "./components/main/Main";
 import Footer from "./components/footer/Footer";
 import Login from "./components/login/Login";
 import Productos from "./components/productos/productos";
+import DetalleProducto from "./components/productos/DetalleProducto";
 import Contacto from "./components/contacto/contacto";
 import Carrito from "./components/carrito/carrito";
 import Dashboard from "./components/dashboard/dashboard";
@@ -28,6 +29,17 @@ function App() {
           <>
             <Header />
             <Productos />
+            <Footer />
+          </>
+        }
+      />
+
+      <Route
+        path="/productos/:id"
+        element={
+          <>
+            <Header />
+            <DetalleProducto />
             <Footer />
           </>
         }
