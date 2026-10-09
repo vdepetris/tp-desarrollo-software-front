@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useCarrito } from "../../context/CarritoContext";
 import "../card/card.css";
 import "./detalle-producto.css";
 
@@ -7,7 +8,12 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 function DetalleProducto() {
   const { id } = useParams();
+  // agregar: función del contexto que mete el producto en el carrito.
+  const { agregar } = useCarrito();
   const [resultado, setResultado] = useState(null);
+  // cantidad: unidades elegidas. agregado: para mostrar el aviso al agregar.
+  const [cantidad, setCantidad] = useState(1);
+  const [agregado, setAgregado] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -45,6 +51,12 @@ function DetalleProducto() {
   const producto = cargando ? null : resultado.producto;
   const error = cargando ? "" : resultado.error;
 
+  // Agrega al carrito la cantidad elegida (sin pasarse del stock) y muestra el aviso.
+  const agregarAlCarrito = () => {
+    agregar(producto, Math.min(cantidad, producto.stock));
+    setAgregado(true);
+  };
+
   return (
     <main className="detalle-producto">
       <div className="detalle-producto__contenedor">
@@ -77,11 +89,18 @@ function DetalleProducto() {
                       id="cantidad-producto"
                       type="number"
                       min="1"
+                      max={producto.stock}
                       step="1"
-                      defaultValue="1"
+                      value={cantidad}
+                      onChange={(event) => setCantidad(Math.max(1, Number(event.target.value) || 1))}
                     />
                   </div>
-                  <button className="detalle-producto__agregar" type="button">
+                  <button
+                    className="detalle-producto__agregar"
+                    type="button"
+                    disabled={producto.stock <= 0}
+                    onClick={agregarAlCarrito}
+                  >
                     <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                       <circle cx="9" cy="21" r="1" />
                       <circle cx="20" cy="21" r="1" />
@@ -90,6 +109,12 @@ function DetalleProducto() {
                     Añadir al carrito
                   </button>
                 </div>
+
+                {agregado && (
+                  <p role="status">
+                    Producto agregado. <Link to="/carrito">Ver carrito</Link>
+                  </p>
+                )}
 
                 <h2>Detalles del producto</h2>
                 <dl className="detalle-producto__datos">
