@@ -182,7 +182,6 @@ function Productos() {
                     <Card
                       key={producto.id}
                       id={producto.id}
-                      variant="catalog"
                       name={producto.nombre}
                       description={producto.descripcion}
                       price={mostrarPrecio(Number(producto.precio))}

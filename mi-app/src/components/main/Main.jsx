@@ -1,5 +1,6 @@
 import "./Main.css";
 import Card from "../card/card";
+import { Link } from "react-router-dom";
 
 const featuredProducts = [
   {
@@ -30,38 +31,49 @@ function Main() {
       <section className="hero">
         <div className="hero__left">
           <span className="hero__eyebrow">Suplementos de alto rendimiento</span>
-          <h1 className="hero__title">Bienvenido a Nutrax</h1>
+          <h1 className="hero__title">Tu próximo nivel<br /><span>empieza acá.</span></h1>
           <p className="hero__text">
-            Suplementos y elementos de gimnasio para alcanzar tus objetivos con calidad premiun y resultados reales.
+            Encontrá en Nutrax los suplementos y elementos de gimnasio para acompañar cada entrenamiento y alcanzar tus objetivos.
           </p>
           <div className="hero__actions">
-            <button className="btn btn--primary">Ver productos</button>
-            <button className="btn btn--secondary">Contacto</button>
+            <Link className="btn btn--primary" to="/productos">Explorar productos <span aria-hidden="true">↗</span></Link>
+            <Link className="btn btn--secondary" to="/contacto">Contactanos</Link>
           </div>
           <ul className="hero__benefits">
             <li>Envíos a todo el país</li>
             <li>Calidad premium</li>
-            <li>Resultados reales</li>
+            <li>Para tu rutina</li>
           </ul>
         </div>
         <div className="hero__right">
-          <div className="hero__card hero__card--large">
-            <span className="hero__product-label">Whey Protein</span>
-            
+          <div className="hero__showcase">
+            <span className="hero__showcase-kicker">NUTRAX / SUPLEMENTOS</span>
+            <div className="hero__halo" aria-hidden="true" />
+            <div className="hero__envases" aria-hidden="true">
+              <div className="product-card__visual hero__envase hero__envase--small">
+                <small>NUTRAX</small><span>CREATINA</span><small>MONOHIDRATADA</small>
+              </div>
+              <div className="product-card__visual hero__envase hero__envase--large">
+                <small>NUTRAX</small><span>WHEY</span><small>PROTEIN</small>
+              </div>
+            </div>
+            <div className="hero__showcase-caption">
+              <span>Constancia. Fuerza. Nutrax.</span>
+              <small>Todo para acompañar tu entrenamiento.</small>
+            </div>
           </div>
-          <div className="hero__card hero__card--small hero__card--left">
-            <span>Creatine</span>
-          </div>
-          <div className="hero__card hero__card--small hero__card--right">
-            <span>Multivitamínico</span>
+          <div className="hero__note">
+            <span aria-hidden="true">↗</span>
+            <div><strong>Un objetivo, muchas posibilidades.</strong><small>Elegí lo que mejor acompaña tu rutina.</small></div>
           </div>
         </div>
       </section>
 
       <section className="featured">
         <div className="section-header">
-          <span>Productos destacados</span>
-          <h2>en tendencia</h2>
+          <span>Explorá el catálogo</span>
+          <h2>Últimos productos</h2>
+          <p>Una selección para sumar a tu entrenamiento.</p>
         </div>
         <div className="product-grid">
           {featuredProducts.map((product) => (
@@ -70,6 +82,8 @@ function Main() {
               name={product.name}
               description={product.description}
               price={product.price}
+              category="Suplementos"
+              label="NUTRAX"
             />
           ))}
         </div>
