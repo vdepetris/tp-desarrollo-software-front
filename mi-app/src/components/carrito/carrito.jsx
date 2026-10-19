@@ -1,34 +1,57 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useCarrito } from "../../context/CarritoContext";
 import "./carrito.css";
 
-const productosIniciales = Array.from({ length: 4 }, (_, index) => ({
-  id: index + 1,
-  nombre: "Whey Protein Ultra Premium",
-  variante: "Chocolate · 1 kg",
-  precio: 49990,
-  cantidad: 1,
-}));
+// Dirección del backend, configurada en el archivo .env.
+const apiUrl = import.meta.env.VITE_API_URL;
+
+// TODO: cuando esté el login, el usuario sale de la sesión y no de una constante.
+const USUARIO_ID = 1;
 
 const mostrarPrecio = (valor) => `$${valor.toLocaleString("es-AR")}`;
 
 function Carrito() {
-  const [productos, setProductos] = useState(productosIniciales);
+  const { items: productos, cambiarCantidad, quitar, vaciar } = useCarrito();
 
-  const cambiarCantidad = (id, cambio) => {
-    setProductos((actuales) =>
-      actuales.map((producto) =>
-        producto.id === id
-          ? { ...producto, cantidad: Math.max(1, producto.cantidad + cambio) }
-          : producto,
-      ),
-    );
-  };
+  // mensaje: resultado de la compra (error o confirmación). enviando: evita doble click.
+  const [mensaje, setMensaje] = useState("");
+  const [enviando, setEnviando] = useState(false);
 
   const cantidadTotal = productos.reduce((total, producto) => total + producto.cantidad, 0);
   const subtotal = productos.reduce(
     (total, producto) => total + producto.precio * producto.cantidad,
     0,
   );
+
+  // POST /pedidos: manda al backend los productos y cantidades del carrito.
+  // El precio no se envía: el backend lo toma de la base de datos.
+  async function finalizarCompra() {
+    setMensaje("");
+    setEnviando(true);
+
+    try {
+      const respuesta = await fetch(`${apiUrl}/pedidos`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          usuarioId: USUARIO_ID,
+          items: productos.map((p) => ({ productoId: p.id, cantidad: p.cantidad })),
+        }),
+      });
+      const datos = await respuesta.json();
+      // Si el backend rechaza el pedido (por ejemplo sin stock) mostramos su mensaje.
+      if (!respuesta.ok) throw new Error(datos.error ?? "No se pudo crear el pedido");
+
+      // Pedido creado: vaciamos el carrito y avisamos al usuario.
+      vaciar();
+      setMensaje(`¡Pedido #${datos.id} creado con éxito!`);
+    } catch (err) {
+      setMensaje(err.message);
+    } finally {
+      setEnviando(false);
+    }
+  }
 
   return (
     <main className="carrito">
@@ -45,19 +68,23 @@ function Carrito() {
             <span>{cantidadTotal} {cantidadTotal === 1 ? "unidad" : "unidades"}</span>
           </div>
 
+          {productos.length === 0 && (
+            <p>Tu carrito está vacío. <Link to="/productos">Ver productos</Link></p>
+          )}
+
           {productos.map((producto) => (
             <article className="producto" key={producto.id}>
               <div className="producto__imagen" aria-hidden="true">
                 <div className="producto__envase">
-                  <span>WHEY</span>
-                  <small>PROTEIN</small>
+                  <span>{producto.categoria?.slice(0, 5).toUpperCase()}</span>
+                  <small>NUTRAX</small>
                 </div>
               </div>
 
               <div className="producto__info">
-                <span className="producto__tipo">Suplemento deportivo</span>
+                <span className="producto__tipo">{producto.categoria}</span>
                 <h3>{producto.nombre}</h3>
-                <p>{producto.variante}</p>
+                <button type="button" onClick={() => quitar(producto.id)}>Quitar</button>
                 <span className="producto__precio-unitario">
                   {mostrarPrecio(producto.precio)} c/u
                 </span>
@@ -77,6 +104,7 @@ function Carrito() {
                   <button
                     type="button"
                     aria-label={`Agregar una unidad de ${producto.nombre}`}
+                    disabled={producto.cantidad >= producto.stock}
                     onClick={() => cambiarCantidad(producto.id, 1)}
                   >
                     +
@@ -114,9 +142,15 @@ function Carrito() {
             </div>
           </div>
 
-          <button type="button" className="boton-pagar">
-            Finalizar compra
+          <button
+            type="button"
+            className="boton-pagar"
+            disabled={productos.length === 0 || enviando}
+            onClick={finalizarCompra}
+          >
+            {enviando ? "Procesando..." : "Finalizar compra"}
           </button>
+          {mensaje && <p role="status">{mensaje}</p>}
 
           <ul className="resumen-beneficios">
             <li>Compra segura y protegida</li>
