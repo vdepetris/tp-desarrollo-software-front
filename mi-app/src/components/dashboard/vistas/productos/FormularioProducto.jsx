@@ -33,7 +33,7 @@ function FormularioProducto({ productoInicial, onCerrar, onGuardado }) {
         let totalPaginas = 1;
 
         do {
-          const respuesta = await fetch(`${apiUrl}/categorias?page=${pagina}`, {
+          const respuesta = await fetch(`${apiUrl}/categorias?page=${pagina}`, { credentials: "include",
             signal: controller.signal,
           });
           if (!respuesta.ok) throw new Error("No se pudieron cargar las categorías");
@@ -87,7 +87,7 @@ function FormularioProducto({ productoInicial, onCerrar, onGuardado }) {
       const url = productoInicial
         ? `${apiUrl}/productos/${productoInicial.id}`
         : `${apiUrl}/productos`;
-      const respuesta = await fetch(url, {
+      const respuesta = await fetch(url, { credentials: "include",
         method: productoInicial ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(producto),

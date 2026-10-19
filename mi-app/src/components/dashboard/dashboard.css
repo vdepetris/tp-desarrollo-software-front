@@ -124,3 +124,20 @@
   outline: 2px solid var(--dashboard-accent-text);
   outline-offset: 3px;
 }
+
+/* Tarjetas del cliente: comparten colores y distribución del panel existente. */
+.dashboard__cliente-card {
+  margin-top: 24px;
+  padding: 24px;
+  background: white;
+  border: 1px solid var(--dashboard-border);
+  border-radius: 12px;
+}
+.dashboard__cliente-card p { margin: 8px 0; }
+@media (max-width: 600px) {
+  .dashboard:has(.dashboard__cliente-card) { flex-direction: column; }
+  .dashboard:has(.dashboard__cliente-card) .dashboard__sidebar {
+    width: auto;
+    min-height: auto;
+  }
+}

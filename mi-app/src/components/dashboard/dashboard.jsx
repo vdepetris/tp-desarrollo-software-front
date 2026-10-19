@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./dashboard.css";
+import CerrarSesion from "./CerrarSesion";
 
 import Inicio from "./vistas/Inicio";
 import Productos from "./vistas/Productos";
@@ -66,10 +67,8 @@ function Dashboard() {
           </button>
         </nav>
 
-        <a className="dashboard__logout" href="/login">
-          <SidebarIcon name="salir" />
-          Cerrar sesión
-        </a>
+        {/* Cierra la sesión del servidor, además de salir del panel. */}
+        <CerrarSesion />
       </aside>
 
       <section className="dashboard__content">

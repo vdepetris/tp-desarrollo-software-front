@@ -7,7 +7,7 @@ import Productos from "./components/productos/productos";
 import DetalleProducto from "./components/productos/DetalleProducto";
 import Contacto from "./components/contacto/contacto";
 import Carrito from "./components/carrito/carrito";
-import Dashboard from "./components/dashboard/dashboard";
+import AccesoDashboard from "./components/dashboard/AccesoDashboard";
 
 function App() {
   return (
@@ -77,7 +77,7 @@ function App() {
         }
       />
 
-    <Route path="/dashboard" element={<Dashboard />} />
+    <Route path="/dashboard" element={<AccesoDashboard />} />
 
     </Routes>
   );

@@ -20,7 +20,7 @@ function EliminarPedido({ pedido, onCerrar, onEliminado }) {
     setError("");
 
     try {
-      const respuesta = await fetch(`${apiUrl}/pedidos/${pedido.id}`, { method: "DELETE" });
+      const respuesta = await fetch(`${apiUrl}/pedidos/${pedido.id}`, { credentials: "include", method: "DELETE" });
 
       if (!respuesta.ok) {
         const datos = await respuesta.json();

@@ -24,7 +24,7 @@ function EliminarCategoria({ categoria, onCerrar, onEliminado }) {
     setError("");
 
     try {
-      const respuesta = await fetch(`${apiUrl}/categorias/${categoria.id}`, {
+      const respuesta = await fetch(`${apiUrl}/categorias/${categoria.id}`, { credentials: "include",
         method: "DELETE",
       });
 

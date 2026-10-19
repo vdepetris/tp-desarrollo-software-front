@@ -1,6 +1,28 @@
 import { NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
 import "./Header.css";
 function Header() {
+  const [usuario, setUsuario] = useState(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function consultarSesion() {
+      try {
+        // La cookie identifica la sesión; el backend confirma el usuario conectado.
+        const respuesta = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/sesion`, {
+          credentials: "include",
+          signal: controller.signal,
+        });
+        if (respuesta.ok) setUsuario(await respuesta.json());
+      } catch (error) {
+        if (error.name !== "AbortError") setUsuario(null);
+      }
+    }
+
+    consultarSesion();
+    return () => controller.abort();
+  }, []);
 
   return (
     <header className="header">
@@ -99,12 +121,11 @@ function Header() {
                 <circle cx="19" cy="21" r="1" />
                 <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
               </svg>
-              <span className="header__cart-count">3</span>
             </a>
           </div>
           <div>
-            <a className="button" href="/login">
-              Ingresar
+            <a className="button" href={usuario ? "/dashboard" : "/login"}>
+              {usuario ? "Mi cuenta" : "Ingresar"}
 
               <svg
                 xmlns="http://www.w3.org/2000/svg"

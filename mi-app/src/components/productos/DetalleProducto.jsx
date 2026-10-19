@@ -20,7 +20,7 @@ function DetalleProducto() {
 
     async function cargarProducto() {
       try {
-        const respuesta = await fetch(`${apiUrl}/productos/${id}`, {
+        const respuesta = await fetch(`${apiUrl}/productos/${id}`, { credentials: "include",
           signal: controller.signal,
         });
 

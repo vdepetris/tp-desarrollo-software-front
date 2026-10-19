@@ -19,7 +19,7 @@ function Paginator({ url, recargar = 0, onTotal, mensajeVacio = "No hay registro
         // Conservamos los filtros de la URL al agregar la página.
         const direccion = new URL(url, window.location.origin);
         direccion.searchParams.set("page", pagina);
-        const respuesta = await fetch(direccion, {
+        const respuesta = await fetch(direccion, { credentials: "include",
           signal: controller.signal,
         });
 

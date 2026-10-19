@@ -93,3 +93,16 @@
 .login-form a:hover {
     color: #b7d300;
 }
+
+.login-form .login-toggle {
+    background: transparent;
+    color: #666;
+    padding: 0;
+    font-weight: 400;
+}
+
+.login-form .login-toggle:hover {
+    color: #b7d300;
+    transform: none;
+    box-shadow: none;
+}

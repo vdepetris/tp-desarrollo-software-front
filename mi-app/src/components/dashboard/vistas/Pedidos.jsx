@@ -15,7 +15,7 @@ function Pedidos() {
   useEffect(() => {
     async function cargarPedidos() {
       try {
-        const respuesta = await fetch(`${apiUrl}/pedidos`);
+        const respuesta = await fetch(`${apiUrl}/pedidos`, { credentials: "include" });
         if (!respuesta.ok) throw new Error("No se pudieron cargar los pedidos");
         setPedidos(await respuesta.json());
       } catch (err) {

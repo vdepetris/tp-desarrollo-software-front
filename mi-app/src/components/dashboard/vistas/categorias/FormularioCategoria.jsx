@@ -44,7 +44,7 @@ function FormularioCategoria({ categoriaInicial, onCerrar, onGuardado }) {
       const url = categoriaInicial
         ? `${apiUrl}/categorias/${categoriaInicial.id}`
         : `${apiUrl}/categorias`;
-      const respuesta = await fetch(url, {
+      const respuesta = await fetch(url, { credentials: "include",
         method: categoriaInicial ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(categoria),

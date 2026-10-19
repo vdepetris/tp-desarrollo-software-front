@@ -6,8 +6,6 @@ import "./carrito.css";
 // Dirección del backend, configurada en el archivo .env.
 const apiUrl = import.meta.env.VITE_API_URL;
 
-// TODO: cuando esté el login, el usuario sale de la sesión y no de una constante.
-const USUARIO_ID = 1;
 
 const mostrarPrecio = (valor) => `$${valor.toLocaleString("es-AR")}`;
 
@@ -31,11 +29,10 @@ function Carrito() {
     setEnviando(true);
 
     try {
-      const respuesta = await fetch(`${apiUrl}/pedidos`, {
+      const respuesta = await fetch(`${apiUrl}/pedidos`, { credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          usuarioId: USUARIO_ID,
           items: productos.map((p) => ({ productoId: p.id, cantidad: p.cantidad })),
         }),
       });

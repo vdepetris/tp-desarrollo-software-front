@@ -21,7 +21,7 @@ function EliminarProducto({ producto, onCerrar, onEliminado }) {
     setError("");
 
     try {
-      const respuesta = await fetch(`${apiUrl}/productos/${producto.id}`, {
+      const respuesta = await fetch(`${apiUrl}/productos/${producto.id}`, { credentials: "include",
         method: "DELETE",
       });
 

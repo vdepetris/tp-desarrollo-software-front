@@ -25,7 +25,7 @@ function EditarPedido({ pedido, onCerrar, onGuardado }) {
 
     try {
       // PUT /pedidos/:id
-      const respuesta = await fetch(`${apiUrl}/pedidos/${pedido.id}`, {
+      const respuesta = await fetch(`${apiUrl}/pedidos/${pedido.id}`, { credentials: "include",
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ estado }),
