@@ -4,6 +4,42 @@ import "./contacto.css";
 function Contacto() {
   const [mensajeEstado, setMensajeEstado] = useState("");
 
+  const [enviando, setEnviando] = useState(false);
+
+  async function enviarMensaje(event) {
+    event.preventDefault();
+    if (enviando) return;
+    const formulario = event.currentTarget;
+    const datos = Object.fromEntries(new FormData(formulario));
+    const apiUrl = import.meta.env.VITE_API_URL?.replace(/\/$/, "");
+    setMensajeEstado("");
+    if (!apiUrl) {
+      setMensajeEstado("El servicio de contacto todavía no está disponible.");
+      return;
+    }
+    setEnviando(true);
+    try {
+      const respuesta = await fetch(apiUrl + "/api/contacto", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos),
+      });
+      if (!respuesta.headers.get("content-type")?.includes("application/json")) {
+        throw new Error("El servicio de contacto no está disponible. Intentá más tarde.");
+      }
+      const resultado = await respuesta.json();
+      if (!respuesta.ok) throw new Error(resultado.mensaje || "No pudimos enviar tu consulta.");
+      setMensajeEstado("Tu consulta fue enviada. Gracias por escribirnos.");
+      formulario.reset();
+    } catch (error) {
+      setMensajeEstado(error instanceof TypeError
+        ? "No pudimos conectar con el servidor. Intentá nuevamente."
+        : error.message);
+    } finally {
+      setEnviando(false);
+    }
+  }
+
   return (
     <main className="contacto">
       <div className="contacto__contenedor">
@@ -18,38 +54,35 @@ function Contacto() {
             <div className="contacto__tarjeta-cabecera">
               <span className="contacto__numero">01 / ESCRIBINOS</span>
               <h2 id="contacto-formulario-titulo">Enviá tu consulta</h2>
-              <p>Completá el formulario para que podamos ayudarte.</p>
+              <p>Completá el formulario y envianos tu consulta desde acá.</p>
             </div>
 
-            <form onSubmit={(event) => {
-              event.preventDefault();
-              setMensajeEstado("Tu mensaje no se envió: el formulario todavía no está conectado.");
-            }}>
+            <form onSubmit={enviarMensaje} aria-busy={enviando}>
               <div className="contacto__campos-dobles">
                 <div className="contacto__campo">
                   <label htmlFor="contacto-nombre">Nombre</label>
-                  <input id="contacto-nombre" name="nombre" type="text" placeholder="Tu nombre" autoComplete="given-name" required />
+                  <input id="contacto-nombre" name="nombre" type="text" placeholder="Tu nombre" autoComplete="given-name" maxLength={100} disabled={enviando} required />
                 </div>
                 <div className="contacto__campo">
                   <label htmlFor="contacto-apellido">Apellido</label>
-                  <input id="contacto-apellido" name="apellido" type="text" placeholder="Tu apellido" autoComplete="family-name" required />
+                  <input id="contacto-apellido" name="apellido" type="text" placeholder="Tu apellido" autoComplete="family-name" maxLength={100} disabled={enviando} required />
                 </div>
               </div>
 
               <div className="contacto__campos-dobles">
                 <div className="contacto__campo">
                   <label htmlFor="contacto-email">Correo electrónico</label>
-                  <input id="contacto-email" name="email" type="email" placeholder="nombre@ejemplo.com" autoComplete="email" required />
+                  <input id="contacto-email" name="email" type="email" placeholder="nombre@ejemplo.com" autoComplete="email" maxLength={254} disabled={enviando} required />
                 </div>
                 <div className="contacto__campo">
                   <label htmlFor="contacto-telefono">Teléfono <span>(opcional)</span></label>
-                  <input id="contacto-telefono" name="telefono" type="tel" placeholder="Tu número" autoComplete="tel" />
+                  <input id="contacto-telefono" name="telefono" type="tel" placeholder="Tu número" autoComplete="tel" maxLength={40} disabled={enviando} />
                 </div>
               </div>
 
               <div className="contacto__campo">
                 <label htmlFor="contacto-asunto">Asunto</label>
-                <select id="contacto-asunto" name="asunto" defaultValue="" required>
+                <select id="contacto-asunto" name="asunto" defaultValue="" disabled={enviando} required>
                   <option value="" disabled>Seleccioná un asunto</option>
                   <option value="productos">Productos</option>
                   <option value="pedidos">Pedidos</option>
@@ -60,10 +93,10 @@ function Contacto() {
 
               <div className="contacto__campo">
                 <label htmlFor="contacto-mensaje">Mensaje</label>
-                <textarea id="contacto-mensaje" name="mensaje" rows="5" placeholder="Contanos en qué podemos ayudarte..." required />
+                <textarea id="contacto-mensaje" name="mensaje" rows="5" placeholder="Contanos en qué podemos ayudarte..." maxLength={5000} disabled={enviando} required />
               </div>
 
-              <button className="contacto__enviar" type="submit">Enviar mensaje</button>
+              <button className="contacto__enviar" type="submit" disabled={enviando}>{enviando ? "Enviando…" : "Enviar mensaje"}</button>
               {mensajeEstado && <p className="contacto__estado" role="status">{mensajeEstado}</p>}
             </form>
           </section>
