@@ -1,8 +1,37 @@
-import { NavLink } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import "./Header.css";
 function Header() {
   const [usuario, setUsuario] = useState(null);
+  const [menuAbierto, setMenuAbierto] = useState(false);
+  const headerRef = useRef(null);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    if (!menuAbierto) return;
+
+    function cerrarAfuera(event) {
+      if (!headerRef.current?.contains(event.target)) setMenuAbierto(false);
+    }
+    function cerrarConEscape(event) {
+      if (event.key === "Escape") {
+        setMenuAbierto(false);
+        menuRef.current?.focus();
+      }
+    }
+    const pantalla = window.matchMedia("(min-width: 768px)");
+    function cerrarEnEscritorio(event) {
+      if (event.matches) setMenuAbierto(false);
+    }
+    document.addEventListener("pointerdown", cerrarAfuera);
+    document.addEventListener("keydown", cerrarConEscape);
+    pantalla.addEventListener("change", cerrarEnEscritorio);
+    return () => {
+      document.removeEventListener("pointerdown", cerrarAfuera);
+      document.removeEventListener("keydown", cerrarConEscape);
+      pantalla.removeEventListener("change", cerrarEnEscritorio);
+    };
+  }, [menuAbierto]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -25,7 +54,7 @@ function Header() {
   }, []);
 
   return (
-    <header className="header">
+    <header className="header" ref={headerRef}>
       <div className="header__container">
 
         <div className="header__logo">
@@ -79,7 +108,14 @@ function Header() {
           </svg>
         </div>
 
-        <nav className="header__nav">
+        <nav
+          id="header-navigation"
+          aria-label="Navegación principal"
+          className={`header__nav${menuAbierto ? " header__nav--open" : ""}`}
+          onClick={(event) => {
+            if (event.target.closest("a")) setMenuAbierto(false);
+          }}
+        >
           <NavLink
             to="/"
             className={({ isActive }) => isActive ? "active" : ""}
@@ -100,6 +136,9 @@ function Header() {
           >
             Contacto
           </NavLink>
+          <Link className="button header__mobile-account" to={usuario ? "/dashboard" : "/login"} onClick={() => setMenuAbierto(false)}>
+            {usuario ? "Mi cuenta" : "Ingresar"}
+          </Link>
         </nav>
 
         <div className="header__user">
@@ -123,7 +162,7 @@ function Header() {
               </svg>
             </a>
           </div>
-          <div>
+          <div className="header__desktop-account">
             <a className="button" href={usuario ? "/dashboard" : "/login"}>
               {usuario ? "Mi cuenta" : "Ingresar"}
 
@@ -144,6 +183,17 @@ function Header() {
               </svg>
             </a>
           </div>
+          <button
+            ref={menuRef}
+            type="button"
+            className={`header__toggle${menuAbierto ? " header__toggle--open" : ""}`}
+            aria-label={menuAbierto ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={menuAbierto}
+            aria-controls="header-navigation"
+            onClick={() => setMenuAbierto((abierto) => !abierto)}
+          >
+            <span /><span /><span />
+          </button>
         </div>
 
       </div>

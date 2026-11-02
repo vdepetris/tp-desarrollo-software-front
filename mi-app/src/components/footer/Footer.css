@@ -40,3 +40,26 @@ footer{
 .nx-footer__social-btn{
 
 }
+
+.whatsapp-flotante {
+    position: fixed;
+    right: 24px;
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    z-index: 90;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #128c4a;
+    box-shadow: 0 4px 16px #0003;
+}
+.whatsapp-flotante:hover { background: #0f753e; }
+.whatsapp-flotante:focus-visible { outline: 3px solid #171a16; outline-offset: 4px; }
+@media (max-width: 600px) {
+    .whatsapp-flotante {
+        right: 16px;
+        bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    }
+}

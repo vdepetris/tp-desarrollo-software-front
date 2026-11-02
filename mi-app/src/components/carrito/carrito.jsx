@@ -81,7 +81,12 @@ function Carrito() {
               <div className="producto__info">
                 <span className="producto__tipo">{producto.categoria}</span>
                 <h3>{producto.nombre}</h3>
-                <button type="button" onClick={() => quitar(producto.id)}>Quitar</button>
+                <button className="producto__quitar" type="button" aria-label={`Quitar ${producto.nombre} del carrito`} onClick={() => quitar(producto.id)}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M3 6h18M9 6V4h6v2M5 6l1 14h12l1-14M10 10v6M14 10v6" />
+                  </svg>
+                  Quitar
+                </button>
                 <span className="producto__precio-unitario">
                   {mostrarPrecio(producto.precio)} c/u
                 </span>

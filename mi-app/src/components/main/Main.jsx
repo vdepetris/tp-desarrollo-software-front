@@ -1,31 +1,34 @@
 import "./Main.css";
+import { useEffect, useState } from "react";
 import Card from "../card/card";
 import { Link } from "react-router-dom";
 
-const featuredProducts = [
-  {
-    name: "Whey Protein Ultra Premium",
-    price: "$49.990",
-    description: "Proteína para fuerza y recuperación",
-  },
-  {
-    name: "Creatina Monohidratada",
-    price: "$24.990",
-    description: "Más energía y mejor rendimiento",
-  },
-  {
-    name: "Multivitamínico Daily Performance",
-    price: "$19.990",
-    description: "Vitaminas para tu entrenamiento diario",
-  },
-  {
-    name: "BCAA 2:1:1 Recovery",
-    price: "$29.990",
-    description: "Recuperación muscular de alta calidad",
-  },
-];
-
 function Main() {
+  const [productos, setProductos] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const controller = new AbortController();
+    async function cargarProductos() {
+      try {
+        const respuesta = await fetch(`${import.meta.env.VITE_API_URL}/productos?orden=recientes`, {
+          credentials: "include",
+          signal: controller.signal,
+        });
+        if (!respuesta.ok) throw new Error("No se pudieron cargar los últimos productos.");
+        const resultado = await respuesta.json();
+        if (!controller.signal.aborted) setProductos(resultado.datos.slice(0, 4));
+      } catch (err) {
+        if (!controller.signal.aborted) setError(err.message);
+      } finally {
+        if (!controller.signal.aborted) setCargando(false);
+      }
+    }
+    cargarProductos();
+    return () => controller.abort();
+  }, []);
+
     return (
     <main className="main">
       <section className="hero">
@@ -75,14 +78,18 @@ function Main() {
           <h2>Últimos productos</h2>
           <p>Una selección para sumar a tu entrenamiento.</p>
         </div>
+        {cargando && <p role="status">Cargando productos...</p>}
+        {error && <p role="alert">{error} <Link to="/productos">Ver catálogo</Link></p>}
+        {!cargando && !error && productos.length === 0 && <p>Todavía no hay productos disponibles.</p>}
         <div className="product-grid">
-          {featuredProducts.map((product) => (
+          {productos.map((product) => (
             <Card
-              key={product.name}
-              name={product.name}
-              description={product.description}
-              price={product.price}
-              category="Suplementos"
+              key={product.id}
+              id={product.id}
+              name={product.nombre}
+              description={product.descripcion}
+              price={Number(product.precio).toLocaleString("es-AR", { style: "currency", currency: "ARS" })}
+              category={product.categoria?.nombre}
               label="NUTRAX"
             />
           ))}

@@ -12,6 +12,8 @@ function FormularioProducto({ productoInicial, onCerrar, onGuardado }) {
   const modal = useRef(null);
   // Guardamos las categorías del selector, el mensaje de error y si hay un envío en curso.
   const [categorias, setCategorias] = useState([]);
+  const [marcas, setMarcas] = useState([]);
+  const [marcaSeleccionada, setMarcaSeleccionada] = useState(productoInicial?.marcaId ?? "");
   // Conservamos la selección mientras llegan las opciones del backend.
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(productoInicial?.categoriaId ?? "");
   const [error, setError] = useState("");
@@ -52,6 +54,27 @@ function FormularioProducto({ productoInicial, onCerrar, onGuardado }) {
 
     // Declarar la función no la ejecuta: esta llamada inicia el GET.
     cargarCategorias();
+    async function cargarMarcas() {
+      try {
+        let todas = [];
+        let pagina = 1;
+        let totalPaginas = 1;
+        do {
+          const respuesta = await fetch(`${apiUrl}/marcas?page=${pagina}`, {
+            credentials: "include", signal: controller.signal,
+          });
+          if (!respuesta.ok) throw new Error("No se pudieron cargar las marcas");
+          const resultado = await respuesta.json();
+          todas = [...todas, ...resultado.datos];
+          totalPaginas = resultado.totalPaginas;
+          pagina++;
+        } while (pagina <= totalPaginas);
+        setMarcas(todas);
+      } catch (err) {
+        if (err.name !== "AbortError") setError(err.message);
+      }
+    }
+    cargarMarcas();
     // Limpieza del efecto: cerramos el diálogo al desmontar el componente.
     // React también ejecuta esta limpieza en el ciclo adicional de StrictMode en desarrollo.
     return () => {
@@ -74,6 +97,7 @@ function FormularioProducto({ productoInicial, onCerrar, onGuardado }) {
       precio: Number(formulario.get("precio")),
       stock: Number(formulario.get("stock")),
       categoriaId: Number(formulario.get("categoriaId")),
+      marcaId: formulario.get("marcaId") ? Number(formulario.get("marcaId")) : null,
     };
 
     // Limpiamos el error anterior y deshabilitamos los botones mientras se guarda.
@@ -101,6 +125,7 @@ function FormularioProducto({ productoInicial, onCerrar, onGuardado }) {
       // Avisamos al padre para que actualice la tabla y cierre el popup.
       onGuardado({
         ...datos,
+        marca: marcas.find((marca) => marca.id === producto.marcaId) ?? null,
         categoria: categorias.find((categoria) => categoria.id === producto.categoriaId),
       });
     } catch (err) {
@@ -145,6 +170,15 @@ function FormularioProducto({ productoInicial, onCerrar, onGuardado }) {
             <option value="" disabled>Seleccioná una categoría</option>
             {categorias.map((categoria) => (
               <option key={categoria.id} value={categoria.id}>{categoria.nombre}</option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Marca (opcional)
+          <select name="marcaId" value={marcaSeleccionada} onChange={(event) => setMarcaSeleccionada(event.target.value)}>
+            <option value="">Sin marca</option>
+            {marcas.map((marca) => (
+              <option key={marca.id} value={marca.id}>{marca.nombre}</option>
             ))}
           </select>
         </label>

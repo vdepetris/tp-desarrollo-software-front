@@ -123,6 +123,10 @@ function DetalleProducto() {
                     <dd>{producto.categoria?.nombre}</dd>
                   </div>
                   <div>
+                    <dt>Marca</dt>
+                    <dd>{producto.marca?.nombre ?? "Sin marca"}</dd>
+                  </div>
+                  <div>
                     <dt>Stock</dt>
                     <dd>{producto.stock} unidades</dd>
                   </div>

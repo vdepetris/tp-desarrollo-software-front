@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Card from "../card/card";
 import Paginator from "../paginator/paginator";
 import "./productos.css";
@@ -18,10 +18,39 @@ function Productos() {
   const [filtros, setFiltros] = useState(filtrosIniciales);
   const [filtrosAplicados, setFiltrosAplicados] = useState(filtrosIniciales);
   const [filtrosAbiertos, setFiltrosAbiertos] = useState(false);
+  const dialogRef = useRef(null);
+  const [esMovil, setEsMovil] = useState(() => window.matchMedia("(max-width: 760px)").matches);
+  const PanelFiltros = esMovil ? "dialog" : "aside";
+
+  useEffect(() => {
+    const pantalla = window.matchMedia("(max-width: 760px)");
+    function actualizarPantalla(event) {
+      setEsMovil(event.matches);
+      setFiltrosAbiertos(false);
+    }
+    pantalla.addEventListener("change", actualizarPantalla);
+    return () => pantalla.removeEventListener("change", actualizarPantalla);
+  }, []);
   const [categorias, setCategorias] = useState([]);
   const [total, setTotal] = useState(null);
   const [reinicio, setReinicio] = useState(0);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!esMovil) return;
+    const dialog = dialogRef.current;
+    if (!filtrosAbiertos) {
+      if (dialog.open) dialog.close();
+      return;
+    }
+    dialog.showModal();
+    const overflowAnterior = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = overflowAnterior;
+      if (dialog.open) dialog.close();
+    };
+  }, [filtrosAbiertos, esMovil]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -98,15 +127,36 @@ function Productos() {
           type="button"
           aria-expanded={filtrosAbiertos}
           aria-controls="panel-filtros"
-          onClick={() => setFiltrosAbiertos((abiertos) => !abiertos)}
+          aria-haspopup="dialog"
+          onClick={() => {
+            setFiltros({ ...filtrosAplicados });
+            setFiltrosAbiertos(true);
+          }}
         >
-          Filtros <span aria-hidden="true">{filtrosAbiertos ? "−" : "+"}</span>
+          Filtrar <span aria-hidden="true">☷</span>
         </button>
 
         <div className="productos-container">
-          <aside id="panel-filtros" className={`filtros ${filtrosAbiertos ? "filtros--abiertos" : ""}`}>
+          <PanelFiltros
+            ref={dialogRef}
+            id="panel-filtros"
+            className="filtros"
+            aria-labelledby="filtros-titulo"
+            onClose={() => setFiltrosAbiertos(false)}
+            onClick={(event) => {
+              if (esMovil && event.target === event.currentTarget) {
+                const rect = event.currentTarget.getBoundingClientRect();
+                if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) {
+                  setFiltrosAbiertos(false);
+                }
+              }
+            }}
+          >
             <div className="filtros__cabecera">
-              <h2>Filtros</h2>
+              <h2 id="filtros-titulo">{esMovil ? "Filtrar productos" : "Filtros"}</h2>
+              <button className="filtros__cerrar" type="button" aria-label="Cerrar filtros" onClick={() => setFiltrosAbiertos(false)}>✕</button>
+            </div>
+            <div className="filtros__limpiar">
               <button type="button" onClick={limpiarFiltros}>Limpiar</button>
             </div>
 
@@ -161,7 +211,7 @@ function Productos() {
 
               <button className="btn-filtrar" type="submit">Aplicar filtros</button>
             </form>
-          </aside>
+          </PanelFiltros>
 
           <section className="productos-resultados" aria-label="Catálogo de productos">
             <Paginator

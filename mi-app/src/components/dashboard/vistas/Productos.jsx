@@ -67,6 +67,7 @@ return (
                     <th>Precio</th>
                     <th>Stock</th>
                     <th>Categoria</th>
+                    <th>Marca</th>
                     <th>Acciones</th>
                   </tr>
                 </thead>
@@ -78,6 +79,7 @@ return (
                       <td>${Number(producto.precio).toFixed(0)}</td>
                       <td>{producto.stock}</td>
                       <td>{producto.categoria.nombre}</td>
+                      <td>{producto.marca?.nombre ?? "Sin marca"}</td>
                       <td>
                         <div className="productos-dashboard__acciones">
                           <button

@@ -5,9 +5,11 @@ import CerrarSesion from "./CerrarSesion";
 import Inicio from "./vistas/Inicio";
 import Productos from "./vistas/Productos";
 import Pedidos from "./vistas/Pedidos";
+import Marcas from "./vistas/Marcas";
 import Categorias from "./vistas/Categorias";
 
 const sidebarIcons = {
+  marcas: <><path d="M20 13 13 20a2 2 0 0 1-2.8 0L3 12.8V3h9.8l7.2 7.2a2 2 0 0 1 0 2.8Z" /><circle cx="7.5" cy="7.5" r="1" /></>,
   inicio: <><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-8H9v8H4a1 1 0 0 1-1-1Z" /></>,
   productos: <><path d="m12 3 9 5v8l-9 5-9-5V8Z" /><path d="m3 8 9 5 9-5M12 13v8M7.5 5.5l9 5" /></>,
   categorias: <><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></>,
@@ -65,6 +67,10 @@ function Dashboard() {
             <SidebarIcon name="pedidos" />
             Pedidos
           </button>
+          <button className={vistaActual === "marcas" ? "active" : ""} onClick={() => setVistaActual("marcas")}>
+            <SidebarIcon name="marcas" />
+            Marcas
+          </button>
         </nav>
 
         {/* Cierra la sesión del servidor, además de salir del panel. */}
@@ -75,6 +81,7 @@ function Dashboard() {
         {vistaActual === "inicio" && <Inicio />}
         {vistaActual === "productos" && <Productos />}
         {vistaActual === "categorias" && <Categorias />}
+        {vistaActual === "marcas" && <Marcas />}
         {vistaActual === "pedidos" && <Pedidos />}
       </section>
     </main>
